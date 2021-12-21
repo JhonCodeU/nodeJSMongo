@@ -26,19 +26,19 @@ function addMessage(message) {
 }
 
 async function getMessages(filterUser, filterMessage) {
-    let filter = {}
-    if (filterUser){
-        filter = {
-            user: filterUser
-        }
-    }
-    if (filterMessage){
-        filter = {
-            ...filter,
-            message: filterMessage
-        }
-    }
-    return await Model.find(filter)
+  let filter = {};
+  if (filterUser) {
+    filter = {
+      user: filterUser,
+    };
+  }
+  if (filterMessage) {
+    filter = {
+      ...filter,
+      message: filterMessage,
+    };
+  }
+  return await Model.find(filter);
 }
 
 async function updateMessage(id, message) {
@@ -50,10 +50,27 @@ async function updateMessage(id, message) {
   return updatedMessage;
 }
 
+const removeMessage = async (id) => {
+  const siExiste = await ifExist(id);
+  if (!siExiste) {
+    return siExiste;
+  }
+  return await Model.deleteOne({
+    _id: id,
+  });
+};
+
+const ifExist = async (id) => {
+  return await Model.exists({
+    _id: id,
+  });
+};
+
 module.exports = {
   add: addMessage,
   list: getMessages,
   updateMessage: updateMessage,
+  removeMessage: removeMessage,
   //get
   //post
   //delete

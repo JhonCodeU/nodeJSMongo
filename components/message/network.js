@@ -51,9 +51,14 @@ router.put("/:id", async (req, res) => {
 });
 
 //Remove a message
-router.delete("/", function (req, res) {
-  console.log(req.body);
-  console.log(req.query);
+router.delete("/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+        const result = await controller.deleteMessage(id);
+        response.success(req, res, result, 200);
+    } catch (error) {
+        response.error(req, res, "Error interno", 500, error);
+    }
 });
 
 module.exports = router;

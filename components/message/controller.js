@@ -1,13 +1,13 @@
 const store = require("./store");
 
 function getMessages(filterUser, filterMessage) {
-    return new Promise((resolve, reject) => {
-        try {
-            resolve(store.list(filterUser, filterMessage))
-        } catch (error) {
-            reject(error)
-        }
-    })
+  return new Promise((resolve, reject) => {
+    try {
+      resolve(store.list(filterUser, filterMessage));
+    } catch (error) {
+      reject(error);
+    }
+  });
 }
 
 function addMessage(user, message) {
@@ -39,11 +39,29 @@ function updateMessage(id, message) {
     const result = await store.updateMessage(id, message);
     resolve(result);
   });
-  
 }
+
+const deleteMessage = (id) => {
+  return new Promise(async (resolve, reject) => {
+    if (!id) {
+      reject("ID invalido");
+    }
+    await store
+      .removeMessage(id)
+      .then((resultado) => {
+        if (resultado) {
+          resolve("Mensaje eliminado");
+        } else {
+          reject("[Controller] El dato no existe en Store");
+        }
+      })
+      .catch((err) => reject(err));
+  });
+};
 
 module.exports = {
   addMessage,
   getMessages,
   updateMessage,
+  deleteMessage,
 };
