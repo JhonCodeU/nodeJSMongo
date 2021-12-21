@@ -21,25 +21,38 @@ db.connect(url, {
   });
 
 function addMessage(message) {
-  //list.push(message);
   const myMessage = new Model(message);
   myMessage.save();
 }
 
-async function getMessage() {
-  //return list;
-  const messages = await Model.find();
-  return messages;
+async function getMessages(filterUser, filterMessage) {
+    let filter = {}
+    if (filterUser){
+        filter = {
+            user: filterUser
+        }
+    }
+    if (filterMessage){
+        filter = {
+            ...filter,
+            message: filterMessage
+        }
+    }
+    return await Model.find(filter)
 }
 
 async function updateMessage(id, message) {
-    const updatedMessage = await Model.updateOne({ _id: id }, { message: message }, { new: true });
-    return updatedMessage;
+  const updatedMessage = await Model.updateOne(
+    { _id: id },
+    { message: message },
+    { new: true }
+  );
+  return updatedMessage;
 }
 
 module.exports = {
   add: addMessage,
-  list: getMessage,
+  list: getMessages,
   updateMessage: updateMessage,
   //get
   //post

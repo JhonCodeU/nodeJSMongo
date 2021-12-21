@@ -1,10 +1,13 @@
 const store = require("./store");
 
-function getMessage() {
-  new Promise((resolve, reject) => {
-    resolve(store.list());
-  });
-  return store.list();
+function getMessages(filterUser, filterMessage) {
+    return new Promise((resolve, reject) => {
+        try {
+            resolve(store.list(filterUser, filterMessage))
+        } catch (error) {
+            reject(error)
+        }
+    })
 }
 
 function addMessage(user, message) {
@@ -32,7 +35,7 @@ function updateMessage(id, message) {
       console.error("Error: faltan datos");
       return reject("Invalid data");
     }
-    
+
     const result = await store.updateMessage(id, message);
     resolve(result);
   });
@@ -41,6 +44,6 @@ function updateMessage(id, message) {
 
 module.exports = {
   addMessage,
-  getMessage,
+  getMessages,
   updateMessage,
 };
