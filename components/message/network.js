@@ -1,7 +1,13 @@
 const express = require("express");
+const multer = require("multer");
+
 const router = express.Router();
 const controller = require("./controller");
 const response = require("../../network/response");
+
+const upload = multer({
+  dest: "public/uploads/",
+});
 
 //Get all messages
 router.get("/", function (req, res) {
@@ -19,7 +25,7 @@ router.get("/", function (req, res) {
 });
 
 //Create a new message
-router.post("/", async (req, res) => {
+router.post("/", upload.single('file'), async (req, res) => {
   const { user, message } = req.body;
 
   try {
@@ -52,13 +58,13 @@ router.put("/:id", async (req, res) => {
 
 //Remove a message
 router.delete("/:id", async (req, res) => {
-    const { id } = req.params;
-    try {
-        const result = await controller.deleteMessage(id);
-        response.success(req, res, result, 200);
-    } catch (error) {
-        response.error(req, res, "Error interno", 500, error);
-    }
+  const { id } = req.params;
+  try {
+    const result = await controller.deleteMessage(id);
+    response.success(req, res, result, 200);
+  } catch (error) {
+    response.error(req, res, "Error interno", 500, error);
+  }
 });
 
 module.exports = router;
