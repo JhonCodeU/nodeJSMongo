@@ -10,15 +10,23 @@ function getMessages(filterUser, filterMessage) {
   });
 }
 
-function addMessage(user, message) {
+function addMessage(user, message, chat, file) {
   return new Promise((resolve, reject) => {
     if (!user || !message) {
       console.error("Error: faltan datos");
       return reject("Invalid data");
     }
+
+    let fileUrl = '';
+    if (file) {
+      fileUrl = `http://localhost:3000/app/uploads/${file.filename}`;
+    }
+    
     const fullMessage = {
+      chat: chat,
       user: user,
       message: message,
+      file: fileUrl,
       date: new Date(),
     };
 

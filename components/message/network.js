@@ -26,10 +26,12 @@ router.get("/", function (req, res) {
 
 //Create a new message
 router.post("/", upload.single('file'), async (req, res) => {
-  const { user, message } = req.body;
+
+  const { user, message, chat } = req.body;
+  console.log(req.file);
 
   try {
-    const fullMessage = await controller.addMessage(user, message);
+    const fullMessage = await controller.addMessage(user, message, chat, req.file);
     response.success(req, res, fullMessage, 201);
   } catch (error) {
     response.error(
