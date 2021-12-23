@@ -1,7 +1,9 @@
 const express = require('express');
-const bodyParser = require('body-parser');
+const app = express();
+const server = require('http').Server(app);
 
-//Databases
+const bodyParser = require('body-parser');
+const socket = require('./socket')
 const connectionString = require('./db/connectionString');
 const db = require('./db/db');
 
@@ -10,15 +12,15 @@ db(connect.getConnectionString());
 
 const router = require('./network/routes');
 
-
-var app = express();
 app.use(bodyParser.json());
 
 router(app);
 
+socket.connect(server);
+
 app.use('/app', express.static('public'));
 
-app.listen(3000, function () {
+server.listen(3000, function () {
     console.log('Servidor escuchando en el puerto 3000');
 });
 
