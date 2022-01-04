@@ -2,25 +2,26 @@ const express = require('express');
 const app = express();
 const server = require('http').Server(app);
 
+const config = require('./config');
+
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const socket = require('./socket')
-const connectionString = require('./db/connectionString');
 const db = require('./db/db');
 
-const connect = new connectionString("user", "user1234", "cluster.lp75p.mongodb.net", "Cluster");
-db(connect.getConnectionString());
+db(config.dbUrl);
 
 const router = require('./network/routes');
 
+app.use(cors());
+
 app.use(bodyParser.json());
-
 router(app);
-
 socket.connect(server);
 
-app.use('/app', express.static('public'));
+app.use(config.publicRoute, express.static('public'));
 
-server.listen(3000, function () {
-    console.log('Servidor escuchando en el puerto 3000');
+server.listen(config.port, function () {
+    console.log('Servidor escuchando en el host '+ config.host +':', config.port);
 });
 

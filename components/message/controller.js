@@ -1,5 +1,6 @@
 const store = require("./store");
-const {socket} = require("../../socket");
+const { socket } = require("../../socket");
+const config = require('../../config');
 
 function getMessages(filterUser, filterMessage) {
   return new Promise((resolve, reject) => {
@@ -20,7 +21,7 @@ function addMessage(user, message, chat, file) {
 
     let fileUrl = '';
     if (file) {
-      fileUrl = `http://localhost:3000/app/uploads/${file.filename}`;
+      fileUrl = `${config.host}:${config.port}/${config.publicRoute}/uploads/${file.filename}`;
     }
     
     const fullMessage = {
